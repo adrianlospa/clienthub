@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { getWorkspaceId } from '@/lib/workspace'
 import { getWorkspaceMembers } from '@/lib/workspace-members'
+import { getCurrentUser } from '@/lib/auth'
 import ProjectDetailClient from '@/components/ProjectDetailClient'
 import type { Activity, ActivityType, ClientDocument, Comment, Project } from '@/lib/types'
 
@@ -12,15 +13,15 @@ export default async function ProjectDetailPage({
 }) {
   const { id } = await params
   const supabase = await createSupabaseServerClient()
-  const workspaceId = await getWorkspaceId(supabase)
+
+  const [workspaceId, user, projectRes] = await Promise.all([
+    getWorkspaceId(supabase),
+    getCurrentUser(),
+    supabase.from('projects').select('*').eq('id', id).maybeSingle(),
+  ])
   if (!workspaceId) return null
-
-  const { data: project } = await supabase.from('projects').select('*').eq('id', id).maybeSingle()
+  const project = projectRes.data
   if (!project) notFound()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
 
   const [activitiesRes, activityTypesRes, commentsRes, documentsRes, members] = await Promise.all([
     supabase.from('activities').select('*').eq('project_id', id).order('due_date', { ascending: true }),

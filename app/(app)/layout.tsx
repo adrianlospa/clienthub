@@ -1,13 +1,12 @@
 import { redirect } from 'next/navigation'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { getWorkspaceId, listWorkspaces } from '@/lib/workspace'
+import { getCurrentUser } from '@/lib/auth'
 import Sidebar from '@/components/Sidebar'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createSupabaseServerClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  const user = await getCurrentUser()
   if (!user) redirect('/login')
 
   const [workspaces, workspaceId] = await Promise.all([

@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { getWorkspaceId } from '@/lib/workspace'
 import { getAllSettings } from '@/lib/config'
 import { getWorkspaceMembers } from '@/lib/workspace-members'
+import { getCurrentUser } from '@/lib/auth'
 import ClientDetailClient from '@/components/ClientDetailClient'
 import type {
   Activity,
@@ -22,16 +23,16 @@ export default async function ClientDetailPage({
 }) {
   const { id } = await params
   const supabase = await createSupabaseServerClient()
-  const workspaceId = await getWorkspaceId(supabase)
-  if (!workspaceId) return null
 
   // RLS face filtrarea pe workspace — un id din alt workspace returnează null.
-  const { data: client } = await supabase.from('clients').select('*').eq('id', id).maybeSingle()
+  const [workspaceId, user, clientRes] = await Promise.all([
+    getWorkspaceId(supabase),
+    getCurrentUser(),
+    supabase.from('clients').select('*').eq('id', id).maybeSingle(),
+  ])
+  if (!workspaceId) return null
+  const client = clientRes.data
   if (!client) notFound()
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
 
   const [
     settings,

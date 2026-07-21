@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { getWorkspaceId, listWorkspaces } from '@/lib/workspace'
+import { getCurrentUser } from '@/lib/auth'
 import SettingsClient from '@/components/SettingsClient'
 import type { GmailConnectionPublic, Status } from '@/lib/types'
 
@@ -10,12 +11,8 @@ export default async function SettingsPage({
 }) {
   const { gmail } = await searchParams
   const supabase = await createSupabaseServerClient()
-  const workspaceId = await getWorkspaceId(supabase)
+  const [workspaceId, user] = await Promise.all([getWorkspaceId(supabase), getCurrentUser()])
   if (!workspaceId) return null
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
 
   const [statusesRes, clientsRes, workspaces, prefRes, gmailRes] = await Promise.all([
     supabase

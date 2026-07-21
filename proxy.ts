@@ -24,9 +24,14 @@ export async function proxy(request: NextRequest) {
     }
   )
 
+  // getSession() citește local din cookie, fără rută de rețea către Supabase —
+  // middleware-ul rulează pe fiecare navigare, deci un apel de rețea aici s-ar
+  // repeta la fiecare click. Verificarea reală (auth.getUser()) rămâne
+  // obligatorie în fiecare pagină/route handler; asta e doar poarta de UX.
   const {
-    data: { user },
-  } = await supabase.auth.getUser()
+    data: { session },
+  } = await supabase.auth.getSession()
+  const user = session?.user ?? null
   const { pathname } = request.nextUrl
   const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/auth')
 

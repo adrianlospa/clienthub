@@ -2,6 +2,7 @@ import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { getWorkspaceId } from '@/lib/workspace'
 import { getAllSettings } from '@/lib/config'
 import { getWorkspaceMembers } from '@/lib/workspace-members'
+import { getCurrentUser } from '@/lib/auth'
 import {
   buildKpis,
   buildPeriodStats,
@@ -18,12 +19,8 @@ export type RankingWithClient = PortfolioRanking & { clients: { name: string } |
 
 export default async function TodayPage() {
   const supabase = await createSupabaseServerClient()
-  const workspaceId = await getWorkspaceId(supabase)
+  const [workspaceId, user] = await Promise.all([getWorkspaceId(supabase), getCurrentUser()])
   if (!workspaceId) return null
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
 
   const today = new Date().toISOString().slice(0, 10)
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86_400_000).toISOString()
