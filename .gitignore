@@ -1,0 +1,15 @@
+node_modules/
+.next/
+out/
+build/
+.env
+.env.local
+.env*.local
+next-env.d.ts
+*.tsbuildinfo
+.DS_Store
+.vercel
+
+# Local permission history poate conține comenzi cu tokenuri/cookie-uri de
+# debugging din sesiuni anterioare — nu se versionează niciodată.
+.claude/settings.local.json
