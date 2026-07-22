@@ -38,7 +38,12 @@ export default function Sidebar({
   return (
     <aside className="flex w-60 shrink-0 flex-col border-r border-slate-200 bg-white px-4 py-6 max-md:w-full max-md:border-r-0 max-md:border-b">
       <div className="flex items-center justify-between px-2">
-        <span className="text-lg font-semibold text-slate-900">ClientHub</span>
+        <span className="flex items-center gap-2">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent-600 text-sm font-bold text-white">
+            C
+          </span>
+          <span className="text-lg font-semibold text-slate-900">ClientHub</span>
+        </span>
         <NotificationBell notifications={notifications} />
       </div>
 
