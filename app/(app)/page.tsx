@@ -36,6 +36,7 @@ export default async function TodayPage() {
     members,
     myInteractionsRes,
     myCommentsRes,
+    rankingsRes,
   ] = await Promise.all([
     getAllSettings(supabase, workspaceId),
     supabase
@@ -70,13 +71,12 @@ export default async function TodayPage() {
       .eq('workspace_id', workspaceId)
       .eq('user_id', user!.id)
       .gte('created_at', sixtyDaysAgo),
+    supabase
+      .from('portfolio_rankings')
+      .select('*, clients(name)')
+      .eq('workspace_id', workspaceId)
+      .order('rank', { ascending: true }),
   ])
-
-  const { data: rankingsRaw } = await supabase
-    .from('portfolio_rankings')
-    .select('*, clients(name)')
-    .eq('workspace_id', workspaceId)
-    .order('rank', { ascending: true })
 
   const clients = (clientsRes.data ?? []) as Client[]
   const statuses = (statusesRes.data ?? []) as Status[]
@@ -113,7 +113,7 @@ export default async function TodayPage() {
       period={period}
       teamPerformance={teamPerformance}
       streak={streak}
-      portfolioRankings={(rankingsRaw ?? []) as RankingWithClient[]}
+      portfolioRankings={(rankingsRes.data ?? []) as RankingWithClient[]}
       currency={settings.currency}
     />
   )

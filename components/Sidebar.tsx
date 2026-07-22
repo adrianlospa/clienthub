@@ -54,6 +54,7 @@ export default function Sidebar({
             <Link
               key={item.href}
               href={item.href}
+              prefetch={true}
               className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
                 active
                   ? 'bg-accent-50 text-accent-700'
