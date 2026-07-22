@@ -48,9 +48,9 @@ export default function AiChat({ clientId }: { clientId: string }) {
   }
 
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm">
+    <section className="rounded-lg border border-line bg-surface p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-slate-900">Întreabă despre acest client</h2>
+        <h2 className="text-sm font-semibold text-ink">Întreabă despre acest client</h2>
         {!open && (
           <button onClick={() => setOpen(true)} className="text-xs font-medium text-accent-700 hover:underline">
             Deschide chat
@@ -61,12 +61,12 @@ export default function AiChat({ clientId }: { clientId: string }) {
       {open && (
         <div className="mt-3 flex flex-col gap-3">
           {messages.length > 0 && (
-            <div className="max-h-80 space-y-3 overflow-y-auto rounded-lg bg-slate-50 p-3">
+            <div className="max-h-80 space-y-3 overflow-y-auto rounded-lg bg-paper p-3">
               {messages.map((m, i) => (
                 <div key={i} className={m.role === 'user' ? 'text-right' : 'text-left'}>
                   <span
                     className={`inline-block max-w-[85%] whitespace-pre-wrap rounded-lg px-3 py-1.5 text-sm ${
-                      m.role === 'user' ? 'bg-accent-600 text-white' : 'bg-white text-slate-700 shadow-sm'
+                      m.role === 'user' ? 'bg-accent-600 text-white' : 'bg-surface text-ink shadow-sm'
                     }`}
                   >
                     {m.content || '…'}
@@ -76,7 +76,7 @@ export default function AiChat({ clientId }: { clientId: string }) {
             </div>
           )}
 
-          {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+          {error && <p className="rounded-lg bg-rust-50 px-3 py-2 text-sm text-rust-700">{error}</p>}
 
           <form onSubmit={send} className="flex gap-2">
             <input
@@ -84,7 +84,7 @@ export default function AiChat({ clientId }: { clientId: string }) {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ex: Când am vorbit ultima dată cu el?"
               disabled={streaming}
-              className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
+              className="flex-1 rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
             />
             <button
               type="submit"

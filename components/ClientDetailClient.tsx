@@ -23,6 +23,7 @@ import ActivitiesPanel from './ActivitiesPanel'
 import AiAnalysis from './AiAnalysis'
 import AiChat from './AiChat'
 import GmailComposeModal from './GmailComposeModal'
+import StatusBadge from './StatusBadge'
 
 export default function ClientDetailClient({
   workspaceId,
@@ -83,18 +84,18 @@ export default function ClientDetailClient({
 
   return (
     <>
-      <Link href="/clienti" className="text-sm text-slate-500 hover:text-slate-700">
+      <Link href="/clienti" className="text-sm text-ink-muted hover:text-ink">
         ← Înapoi la clienți
       </Link>
 
       <div className="mt-3 flex flex-wrap items-start gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">{client.name}</h1>
-          {client.company_name && <p className="text-slate-500">{client.company_name}</p>}
+          <h1 className="text-2xl font-semibold text-ink">{client.name}</h1>
+          {client.company_name && <p className="text-ink-muted">{client.company_name}</p>}
         </div>
         <button
           onClick={() => setEditing(true)}
-          className="ml-auto rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          className="ml-auto rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-paper"
         >
           Editează
         </button>
@@ -106,7 +107,7 @@ export default function ClientDetailClient({
         {hasGmailConnection && client.email && (
           <button
             onClick={() => setComposing(true)}
-            className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700 transition hover:border-accent-500 hover:text-accent-700"
+            className="rounded-lg border border-line bg-surface px-3 py-1.5 text-sm text-ink transition hover:border-accent-500 hover:text-accent-700"
           >
             Trimite prin Gmail
           </button>
@@ -127,7 +128,7 @@ export default function ClientDetailClient({
                 disabled={savingStatus}
                 onChange={(e) => changeStatus(e.target.value)}
                 aria-label="Schimbă statusul"
-                className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
+                className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
               >
                 <option value="">— fără status —</option>
                 {statuses.map((s) => (
@@ -137,14 +138,14 @@ export default function ClientDetailClient({
                 ))}
               </select>
               {status && daysInStatus && (
-                <span className="text-sm text-slate-500">în acest status de {daysInStatus}</span>
+                <span className="text-sm text-ink-muted">în acest status de {daysInStatus}</span>
               )}
             </div>
           </Card>
 
           <Card title="Istoric status">
             {history.length === 0 ? (
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-ink-muted">
                 Niciun istoric încă. Schimbă statusul și apare aici automat.
               </p>
             ) : (
@@ -154,10 +155,10 @@ export default function ClientDetailClient({
                   const to = h.to_status_id ? statusById.get(h.to_status_id) : null
                   return (
                     <li key={h.id} className="flex flex-wrap items-center gap-2 text-sm">
-                      <span className="w-24 shrink-0 text-slate-400">{formatDate(h.changed_at)}</span>
-                      {from ? <StatusPill status={from} /> : <span className="text-slate-400">nou</span>}
-                      <span className="text-slate-400">→</span>
-                      {to ? <StatusPill status={to} /> : <span className="text-slate-400">—</span>}
+                      <span className="w-24 shrink-0 text-ink-faint">{formatDate(h.changed_at)}</span>
+                      {from ? <StatusPill status={from} /> : <span className="text-ink-faint">nou</span>}
+                      <span className="text-ink-faint">→</span>
+                      {to ? <StatusPill status={to} /> : <span className="text-ink-faint">—</span>}
                     </li>
                   )
                 })}
@@ -203,7 +204,7 @@ export default function ClientDetailClient({
             {client.tags.length > 0 && (
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {client.tags.map((t) => (
-                  <span key={t} className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-600">
+                  <span key={t} className="rounded-full bg-paper px-2.5 py-0.5 text-xs text-ink-muted">
                     {t}
                   </span>
                 ))}
@@ -214,15 +215,15 @@ export default function ClientDetailClient({
           <Card title="Pasul următor">
             {client.next_step_date || client.next_step_description ? (
               <>
-                <p className="text-sm text-slate-700">{client.next_step_description ?? '—'}</p>
+                <p className="text-sm text-ink">{client.next_step_description ?? '—'}</p>
                 {client.next_step_date && (
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-ink-muted">
                     {formatDate(client.next_step_date)} · {relativeDays(client.next_step_date)}
                   </p>
                 )}
               </>
             ) : (
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-ink-muted">
                 Niciun pas următor stabilit. Adaugă unul ca să apară pe „Azi".
               </p>
             )}
@@ -253,8 +254,8 @@ export default function ClientDetailClient({
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm">
-      <h2 className="mb-3 text-sm font-semibold text-slate-900">{title}</h2>
+    <section className="rounded-lg border border-line bg-surface p-5">
+      <h2 className="mb-3 text-sm font-semibold text-ink">{title}</h2>
       {children}
     </section>
   )
@@ -263,21 +264,14 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between gap-4">
-      <dt className="shrink-0 text-slate-500">{label}</dt>
-      <dd className="text-right text-slate-800">{value}</dd>
+      <dt className="shrink-0 text-ink-muted">{label}</dt>
+      <dd className="text-right text-ink">{value}</dd>
     </div>
   )
 }
 
 function StatusPill({ status }: { status: Status }) {
-  return (
-    <span
-      className="rounded-full px-2.5 py-0.5 text-xs font-medium text-white"
-      style={{ backgroundColor: status.color }}
-    >
-      {status.name}
-    </span>
-  )
+  return <StatusBadge name={status.name} color={status.color} />
 }
 
 function ContactButton({
@@ -293,7 +287,7 @@ function ContactButton({
     <a
       href={href}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-      className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700 transition hover:border-accent-500 hover:text-accent-700"
+      className="rounded-lg border border-line bg-surface px-3 py-1.5 text-sm text-ink transition hover:border-accent-500 hover:text-accent-700"
     >
       {label}
     </a>

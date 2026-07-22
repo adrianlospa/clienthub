@@ -63,18 +63,18 @@ export default function ProjectDetailClient({
 
   return (
     <>
-      <Link href="/proiecte" className="text-sm text-slate-500 hover:text-slate-700">
+      <Link href="/proiecte" className="text-sm text-ink-muted hover:text-ink">
         ← Înapoi la proiecte
       </Link>
 
       <div className="mt-3 flex flex-wrap items-start gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-slate-900">{project.name}</h1>
-          <p className="text-slate-500">{TYPE_LABELS[project.type]}</p>
+          <h1 className="text-2xl font-semibold text-ink">{project.name}</h1>
+          <p className="text-ink-muted">{TYPE_LABELS[project.type]}</p>
         </div>
         <button
           onClick={() => setEditing(true)}
-          className="ml-auto rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
+          className="ml-auto rounded-lg border border-line bg-surface px-4 py-2 text-sm font-medium text-ink hover:bg-paper"
         >
           Editează
         </button>
@@ -82,14 +82,14 @@ export default function ProjectDetailClient({
 
       <div className="mt-6 grid grid-cols-3 gap-6 max-lg:grid-cols-1">
         <div className="col-span-2 space-y-6 max-lg:col-span-1">
-          <section className="rounded-2xl bg-white p-5 shadow-sm">
-            <h2 className="mb-3 text-sm font-semibold text-slate-900">Status</h2>
+          <section className="rounded-lg border border-line bg-surface p-5">
+            <h2 className="mb-3 text-sm font-semibold text-ink">Status</h2>
             <select
               value={project.status}
               disabled={savingStatus}
               onChange={(e) => changeStatus(e.target.value as Project['status'])}
               aria-label="Schimbă statusul"
-              className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
+              className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
             >
               {Object.entries(STATUS_LABELS).map(([value, label]) => (
                 <option key={value} value={value}>
@@ -118,9 +118,9 @@ export default function ProjectDetailClient({
         </div>
 
         <div className="space-y-6">
-          <section className="rounded-2xl bg-white p-5 shadow-sm">
-            <h2 className="mb-3 text-sm font-semibold text-slate-900">Descriere</h2>
-            <p className="whitespace-pre-wrap text-sm text-slate-700">
+          <section className="rounded-lg border border-line bg-surface p-5">
+            <h2 className="mb-3 text-sm font-semibold text-ink">Descriere</h2>
+            <p className="whitespace-pre-wrap text-sm text-ink">
               {project.description ?? 'Fără descriere.'}
             </p>
           </section>

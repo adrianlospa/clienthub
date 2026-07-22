@@ -74,12 +74,12 @@ export default function SettingsClient({
 
   return (
     <>
-      <h1 className="text-2xl font-semibold text-slate-900">Setări</h1>
-      <p className="mt-1 text-sm text-slate-500">
+      <h1 className="text-2xl font-semibold text-ink">Setări</h1>
+      <p className="mt-1 text-sm text-ink-muted">
         Statusurile sunt per workspace. Ordinea de aici dictează ordinea coloanelor din pipeline.
       </p>
 
-      {error && <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+      {error && <p className="mt-4 rounded-lg bg-rust-50 px-3 py-2 text-sm text-rust-700">{error}</p>}
 
       <div className="mt-6">
         <WorkspacesSettings workspaces={workspaces} />
@@ -93,32 +93,32 @@ export default function SettingsClient({
         <GmailSettings connection={gmailConnection} statusParam={gmailStatus} />
       </div>
 
-      <section className="mt-6 rounded-2xl bg-white p-5 shadow-sm">
-        <h2 className="text-sm font-semibold text-slate-900">Statusuri</h2>
+      <section className="mt-6 rounded-lg border border-line bg-surface p-5">
+        <h2 className="text-sm font-semibold text-ink">Statusuri</h2>
 
         <div className="mt-4 space-y-2">
           {statuses.map((s) => (
-            <div key={s.id} className="flex flex-wrap items-center gap-3 border-b border-slate-50 py-2 last:border-0">
+            <div key={s.id} className="flex flex-wrap items-center gap-3 border-b border-line py-2 last:border-0">
               <input
                 type="color"
                 value={s.color}
                 disabled={busy}
                 onChange={(e) => call(`/api/statuses/${s.id}`, 'PATCH', { color: e.target.value })}
                 aria-label={`Culoare pentru ${s.name}`}
-                className="h-8 w-8 shrink-0 cursor-pointer rounded border border-slate-200"
+                className="h-8 w-8 shrink-0 cursor-pointer rounded border border-line"
               />
-              <span className="min-w-32 font-medium text-slate-800">{s.name}</span>
+              <span className="min-w-32 font-medium text-ink">{s.name}</span>
               <select
                 value={s.phase}
                 disabled={busy}
                 onChange={(e) => call(`/api/statuses/${s.id}`, 'PATCH', { phase: e.target.value })}
                 aria-label={`Faza pentru ${s.name}`}
-                className="rounded-lg border border-slate-200 px-2 py-1 text-xs outline-none focus:border-accent-500"
+                className="rounded-lg border border-line px-2 py-1 text-xs outline-none focus:border-accent-500"
               >
                 <option value="pre_sale">Pre-vânzare</option>
                 <option value="post_sale">Post-vânzare</option>
               </select>
-              <label className="flex items-center gap-1.5 text-xs text-slate-600">
+              <label className="flex items-center gap-1.5 text-xs text-ink-muted">
                 <input
                   type="checkbox"
                   checked={s.is_won}
@@ -127,7 +127,7 @@ export default function SettingsClient({
                 />
                 Câștigat
               </label>
-              <label className="flex items-center gap-1.5 text-xs text-slate-600">
+              <label className="flex items-center gap-1.5 text-xs text-ink-muted">
                 <input
                   type="checkbox"
                   checked={s.is_lost}
@@ -136,11 +136,11 @@ export default function SettingsClient({
                 />
                 Pierdut
               </label>
-              <span className="text-xs text-slate-400">{usage[s.id] ?? 0} clienți</span>
+              <span className="text-xs text-ink-faint">{usage[s.id] ?? 0} clienți</span>
               <button
                 onClick={() => remove(s)}
                 disabled={busy}
-                className="ml-auto text-xs text-red-600 hover:underline"
+                className="ml-auto text-xs text-rust-600 hover:underline"
               >
                 Șterge
               </button>
@@ -148,22 +148,22 @@ export default function SettingsClient({
           ))}
         </div>
 
-        <form onSubmit={addStatus} className="mt-5 flex flex-wrap items-end gap-3 border-t border-slate-100 pt-5">
-          <label className="text-sm font-medium text-slate-700">
+        <form onSubmit={addStatus} className="mt-5 flex flex-wrap items-end gap-3 border-t border-line pt-5">
+          <label className="text-sm font-medium text-ink">
             Status nou
             <input
               required
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="Ex: Negociere"
-              className="mt-1 block rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
+              className="mt-1 block rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
             />
           </label>
           <select
             value={newPhase}
             onChange={(e) => setNewPhase(e.target.value as 'pre_sale' | 'post_sale')}
             aria-label="Faza statusului nou"
-            className="rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
+            className="rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
           >
             <option value="pre_sale">Pre-vânzare</option>
             <option value="post_sale">Post-vânzare</option>
@@ -173,7 +173,7 @@ export default function SettingsClient({
             value={newColor}
             onChange={(e) => setNewColor(e.target.value)}
             aria-label="Culoarea statusului nou"
-            className="h-9 w-9 cursor-pointer rounded border border-slate-200"
+            className="h-9 w-9 cursor-pointer rounded border border-line"
           />
           <button
             type="submit"

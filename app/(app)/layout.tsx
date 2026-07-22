@@ -26,9 +26,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (workspaces.length === 0) {
     return (
       <main className="flex min-h-screen items-center justify-center px-4">
-        <div className="max-w-md rounded-2xl bg-white p-8 text-center shadow-sm">
-          <h1 className="text-lg font-semibold text-slate-900">Niciun workspace</h1>
-          <p className="mt-2 text-sm text-slate-500">
+        <div className="max-w-md rounded-lg border border-line bg-surface p-8 text-center">
+          <h1 className="text-lg font-semibold text-ink">Niciun workspace</h1>
+          <p className="mt-2 text-sm text-ink-muted">
             Contul tău nu e încă membru al niciunui workspace. Rulează <code>supabase/seed.sql</code>{' '}
             sau cere o invitație unui admin.
           </p>

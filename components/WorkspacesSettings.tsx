@@ -58,18 +58,18 @@ export default function WorkspacesSettings({ workspaces }: { workspaces: Workspa
   }
 
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm">
-      <h2 className="text-sm font-semibold text-slate-900">Workspace-uri</h2>
-      <p className="mt-1 text-sm text-slate-500">
+    <section className="rounded-lg border border-line bg-surface p-5">
+      <h2 className="text-sm font-semibold text-ink">Workspace-uri</h2>
+      <p className="mt-1 text-sm text-ink-muted">
         Fiecare workspace are propriile statusuri, clienți și activități. Doar adminii unui
         workspace îi pot schimba numele.
       </p>
 
-      {error && <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+      {error && <p className="mt-4 rounded-lg bg-rust-50 px-3 py-2 text-sm text-rust-700">{error}</p>}
 
       <div className="mt-4 space-y-2">
         {workspaces.map((w) => (
-          <div key={w.id} className="flex flex-wrap items-center gap-3 border-b border-slate-50 py-2 last:border-0">
+          <div key={w.id} className="flex flex-wrap items-center gap-3 border-b border-line py-2 last:border-0">
             {editingId === w.id ? (
               <>
                 <input
@@ -80,7 +80,7 @@ export default function WorkspacesSettings({ workspaces }: { workspaces: Workspa
                     if (e.key === 'Enter') rename(w.id)
                     if (e.key === 'Escape') setEditingId(null)
                   }}
-                  className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm outline-none focus:border-accent-500"
+                  className="rounded-lg border border-line px-3 py-1.5 text-sm outline-none focus:border-accent-500"
                 />
                 <button
                   onClick={() => rename(w.id)}
@@ -91,16 +91,16 @@ export default function WorkspacesSettings({ workspaces }: { workspaces: Workspa
                 </button>
                 <button
                   onClick={() => setEditingId(null)}
-                  className="text-xs text-slate-500 hover:underline"
+                  className="text-xs text-ink-muted hover:underline"
                 >
                   Anulează
                 </button>
               </>
             ) : (
               <>
-                <span className="min-w-32 font-medium text-slate-800">{w.name}</span>
-                <span className="text-xs text-slate-400">{w.slug}</span>
-                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+                <span className="min-w-32 font-medium text-ink">{w.name}</span>
+                <span className="text-xs text-ink-faint">{w.slug}</span>
+                <span className="rounded-full bg-paper px-2 py-0.5 text-xs text-ink-muted">
                   {w.role === 'admin' ? 'admin' : 'membru'}
                 </span>
                 {w.role === 'admin' && (
@@ -109,7 +109,7 @@ export default function WorkspacesSettings({ workspaces }: { workspaces: Workspa
                       setEditingId(w.id)
                       setEditingName(w.name)
                     }}
-                    className="ml-auto text-xs text-slate-500 hover:underline"
+                    className="ml-auto text-xs text-ink-muted hover:underline"
                   >
                     Redenumește
                   </button>
@@ -120,15 +120,15 @@ export default function WorkspacesSettings({ workspaces }: { workspaces: Workspa
         ))}
       </div>
 
-      <form onSubmit={createWorkspace} className="mt-5 flex flex-wrap items-end gap-3 border-t border-slate-100 pt-5">
-        <label className="text-sm font-medium text-slate-700">
+      <form onSubmit={createWorkspace} className="mt-5 flex flex-wrap items-end gap-3 border-t border-line pt-5">
+        <label className="text-sm font-medium text-ink">
           Workspace nou
           <input
             required
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="Ex: Newsletter Pro"
-            className="mt-1 block rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
+            className="mt-1 block rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
           />
         </label>
         <button

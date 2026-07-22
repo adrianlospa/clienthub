@@ -91,9 +91,9 @@ export default function DocumentsPanel({
   }
 
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm">
+    <section className="rounded-lg border border-line bg-surface p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-slate-900">Documente</h2>
+        <h2 className="text-sm font-semibold text-ink">Documente</h2>
         <label className="cursor-pointer text-xs font-medium text-accent-700 hover:underline">
           {uploading ? 'Se încarcă…' : '+ Adaugă fișier'}
           <input
@@ -109,26 +109,26 @@ export default function DocumentsPanel({
         </label>
       </div>
 
-      {error && <p className="mt-2 text-sm text-red-700">{error}</p>}
+      {error && <p className="mt-2 text-sm text-rust-700">{error}</p>}
 
       {documents.length === 0 ? (
-        <p className="mt-3 text-sm text-slate-500">Niciun document încă.</p>
+        <p className="mt-3 text-sm text-ink-muted">Niciun document încă.</p>
       ) : (
         <ul className="mt-3 space-y-2">
           {documents.map((d) => (
-            <li key={d.id} className="flex items-center gap-3 border-b border-slate-50 py-2 text-sm last:border-0">
+            <li key={d.id} className="flex items-center gap-3 border-b border-line py-2 text-sm last:border-0">
               <button
                 onClick={() => handleDownload(d)}
                 className="truncate text-left font-medium text-accent-700 hover:underline"
               >
                 {d.filename}
               </button>
-              <span className="shrink-0 text-xs text-slate-400">{formatSize(d.size_bytes)}</span>
-              <span className="shrink-0 text-xs text-slate-400">{formatDate(d.uploaded_at)}</span>
+              <span className="shrink-0 text-xs text-ink-faint">{formatSize(d.size_bytes)}</span>
+              <span className="shrink-0 text-xs text-ink-faint">{formatDate(d.uploaded_at)}</span>
               <button
                 onClick={() => handleDelete(d)}
                 disabled={busyId === d.id}
-                className="ml-auto shrink-0 text-xs text-red-600 hover:underline"
+                className="ml-auto shrink-0 text-xs text-rust-600 hover:underline"
               >
                 Șterge
               </button>

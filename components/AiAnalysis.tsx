@@ -39,9 +39,9 @@ export default function AiAnalysis({ clientId }: { clientId: string }) {
   }
 
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm">
+    <section className="rounded-lg border border-line bg-surface p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-slate-900">Analiză AI</h2>
+        <h2 className="text-sm font-semibold text-ink">Analiză AI</h2>
         <button
           onClick={analyze}
           disabled={streaming}
@@ -51,16 +51,16 @@ export default function AiAnalysis({ clientId }: { clientId: string }) {
         </button>
       </div>
 
-      {error && <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+      {error && <p className="mt-3 rounded-lg bg-rust-50 px-3 py-2 text-sm text-rust-700">{error}</p>}
 
       {text && (
-        <div className="mt-3 whitespace-pre-wrap rounded-lg bg-slate-50 p-3 text-sm text-slate-700">
+        <div className="mt-3 whitespace-pre-wrap rounded-lg bg-paper p-3 text-sm text-ink">
           {text}
         </div>
       )}
 
       {!text && !streaming && !error && (
-        <p className="mt-3 text-sm text-slate-500">
+        <p className="mt-3 text-sm text-ink-muted">
           Trimite tot istoricul clientului către Claude pentru un rezumat, riscuri și pași
           recomandați. Rezultatul se salvează automat ca notiță AI.
         </p>

@@ -148,31 +148,31 @@ export default function ClientFormModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/40 p-4"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-ink/40 p-4"
       onClick={onClose}
     >
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
-        className="my-8 w-full max-w-2xl rounded-2xl bg-white p-6 shadow-lg"
+        className="my-8 w-full max-w-2xl rounded-lg border border-line bg-surface p-6 shadow-xl"
       >
-        <h2 className="text-lg font-semibold text-slate-900">
+        <h2 className="text-lg font-semibold text-ink">
           {client ? 'Editează clientul' : 'Client nou'}
         </h2>
 
         {showDuplicates && (
-          <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4">
+          <div className="mt-4 rounded-lg border border-gold-100 bg-gold-50 p-4">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-sm font-medium text-amber-900">Posibil duplicat</p>
-                <ul className="mt-2 space-y-1 text-sm text-amber-800">
+                <p className="text-sm font-medium text-gold-700">Posibil duplicat</p>
+                <ul className="mt-2 space-y-1 text-sm text-gold-700">
                   {duplicates.map((d) => (
                     <li key={d.id}>
                       <a href={`/clienti/${d.id}`} className="font-medium underline">
                         {d.name}
                       </a>
                       {d.company_name ? ` · ${d.company_name}` : ''}
-                      <span className="ml-1 text-xs text-amber-700">
+                      <span className="ml-1 text-xs text-gold-700">
                         ({d.match_reason === 'email'
                           ? 'același email'
                           : d.match_reason === 'phone'
@@ -186,7 +186,7 @@ export default function ClientFormModal({
               <button
                 type="button"
                 onClick={() => setDismissedDuplicates(true)}
-                className="shrink-0 text-xs font-medium text-amber-900 underline"
+                className="shrink-0 text-xs font-medium text-gold-700 underline"
               >
                 Ignoră
               </button>
@@ -273,10 +273,10 @@ export default function ClientFormModal({
           </Field>
         </div>
 
-        {error && <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+        {error && <p className="mt-4 rounded-lg bg-rust-50 px-3 py-2 text-sm text-rust-700">{error}</p>}
 
         <div className="mt-6 flex justify-end gap-3">
-          <button type="button" onClick={onClose} className="rounded-lg px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">
+          <button type="button" onClick={onClose} className="rounded-lg px-4 py-2 text-sm text-ink-muted hover:bg-paper">
             Anulează
           </button>
           <button
@@ -293,7 +293,7 @@ export default function ClientFormModal({
 }
 
 const inputClass =
-  'mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 outline-none focus:border-accent-500'
+  'mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm text-ink outline-none focus:border-accent-500'
 
 function Field({
   label,
@@ -305,7 +305,7 @@ function Field({
   children: React.ReactNode
 }) {
   return (
-    <label className={`block text-sm font-medium text-slate-700 ${span2 ? 'col-span-2 max-sm:col-span-1' : ''}`}>
+    <label className={`block text-sm font-medium text-ink ${span2 ? 'col-span-2 max-sm:col-span-1' : ''}`}>
       {label}
       {children}
     </label>
