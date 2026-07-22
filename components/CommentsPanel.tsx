@@ -43,8 +43,8 @@ export default function CommentsPanel({
   }
 
   return (
-    <section className="rounded-lg border border-line bg-surface p-5">
-      <h2 className="text-sm font-semibold text-ink">Notițe</h2>
+    <section className="rounded-2xl bg-white p-5 shadow-sm">
+      <h2 className="text-sm font-semibold text-slate-900">Notițe</h2>
 
       <form onSubmit={submit} className="mt-3 flex flex-col gap-2">
         <textarea
@@ -52,9 +52,9 @@ export default function CommentsPanel({
           onChange={(e) => setText(e.target.value)}
           placeholder="Adaugă o notiță…"
           rows={2}
-          className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
+          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
         />
-        {error && <p className="text-sm text-rust-700">{error}</p>}
+        {error && <p className="text-sm text-red-700">{error}</p>}
         <button
           type="submit"
           disabled={saving || !text.trim()}
@@ -65,13 +65,13 @@ export default function CommentsPanel({
       </form>
 
       {comments.length === 0 ? (
-        <p className="mt-3 text-sm text-ink-muted">Nicio notiță încă.</p>
+        <p className="mt-3 text-sm text-slate-500">Nicio notiță încă.</p>
       ) : (
         <ul className="mt-3 space-y-3">
           {comments.map((c) => (
-            <li key={c.id} className="rounded-lg bg-paper p-3 text-sm">
-              <p className="whitespace-pre-wrap text-ink">{c.text}</p>
-              <p className="mt-1 text-xs text-ink-faint">
+            <li key={c.id} className="rounded-lg bg-slate-50 p-3 text-sm">
+              <p className="whitespace-pre-wrap text-slate-700">{c.text}</p>
+              <p className="mt-1 text-xs text-slate-400">
                 {formatDate(c.created_at)}
                 {c.is_ai && ' · AI'}
               </p>

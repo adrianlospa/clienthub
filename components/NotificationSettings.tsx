@@ -24,9 +24,9 @@ export default function NotificationSettings({ digestEnabled }: { digestEnabled:
   }
 
   return (
-    <section className="rounded-lg border border-line bg-surface p-5">
-      <h2 className="text-sm font-semibold text-ink">Notificări</h2>
-      <label className="mt-3 flex items-center gap-2 text-sm text-ink">
+    <section className="rounded-2xl bg-white p-5 shadow-sm">
+      <h2 className="text-sm font-semibold text-slate-900">Notificări</h2>
+      <label className="mt-3 flex items-center gap-2 text-sm text-slate-700">
         <input
           type="checkbox"
           checked={enabled}

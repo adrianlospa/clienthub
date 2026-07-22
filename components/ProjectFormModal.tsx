@@ -49,35 +49,35 @@ export default function ProjectFormModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-ink/40 p-4"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/40 p-4"
       onClick={onClose}
     >
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
-        className="my-8 w-full max-w-lg rounded-lg border border-line bg-surface p-6 shadow-xl"
+        className="my-8 w-full max-w-lg rounded-2xl bg-white p-6 shadow-lg"
       >
-        <h2 className="text-lg font-semibold text-ink">
+        <h2 className="text-lg font-semibold text-slate-900">
           {project ? 'Editează proiectul' : 'Proiect nou'}
         </h2>
 
-        <label className="mt-4 block text-sm font-medium text-ink">
+        <label className="mt-4 block text-sm font-medium text-slate-700">
           Nume *
           <input
             required
             autoFocus
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
+            className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
           />
         </label>
 
-        <label className="mt-4 block text-sm font-medium text-ink">
+        <label className="mt-4 block text-sm font-medium text-slate-700">
           Tip
           <select
             value={type}
             onChange={(e) => setType(e.target.value as Project['type'])}
-            className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
+            className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
           >
             {Object.entries(TYPE_LABELS).map(([value, label]) => (
               <option key={value} value={value}>
@@ -87,20 +87,20 @@ export default function ProjectFormModal({
           </select>
         </label>
 
-        <label className="mt-4 block text-sm font-medium text-ink">
+        <label className="mt-4 block text-sm font-medium text-slate-700">
           Descriere
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
-            className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
+            className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
           />
         </label>
 
-        {error && <p className="mt-4 rounded-lg bg-rust-50 px-3 py-2 text-sm text-rust-700">{error}</p>}
+        {error && <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
 
         <div className="mt-6 flex justify-end gap-3">
-          <button type="button" onClick={onClose} className="rounded-lg px-4 py-2 text-sm text-ink-muted hover:bg-paper">
+          <button type="button" onClick={onClose} className="rounded-lg px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">
             Anulează
           </button>
           <button

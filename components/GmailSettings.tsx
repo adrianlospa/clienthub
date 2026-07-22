@@ -59,27 +59,27 @@ export default function GmailSettings({
   }
 
   return (
-    <section className="rounded-lg border border-line bg-surface p-5">
-      <h2 className="text-sm font-semibold text-ink">Gmail</h2>
-      <p className="mt-1 text-sm text-ink-muted">
+    <section className="rounded-2xl bg-white p-5 shadow-sm">
+      <h2 className="text-sm font-semibold text-slate-900">Gmail</h2>
+      <p className="mt-1 text-sm text-slate-500">
         Conectează-ți contul ca să aduci email-urile din ultimele 30 zile în istoricul clienților
         și să trimiți direct din ClientHub.
       </p>
 
       {banner && (
-        <p className={`mt-3 rounded-lg px-3 py-2 text-sm ${banner.error ? 'bg-rust-50 text-rust-700' : 'bg-accent-50 text-accent-700'}`}>
+        <p className={`mt-3 rounded-lg px-3 py-2 text-sm ${banner.error ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700'}`}>
           {banner.text}
         </p>
       )}
-      {error && <p className="mt-3 rounded-lg bg-rust-50 px-3 py-2 text-sm text-rust-700">{error}</p>}
-      {syncResult && <p className="mt-3 rounded-lg bg-accent-50 px-3 py-2 text-sm text-accent-700">{syncResult}</p>}
+      {error && <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>}
+      {syncResult && <p className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{syncResult}</p>}
 
       {connection ? (
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <span className="text-sm text-ink">
+          <span className="text-sm text-slate-700">
             Conectat: <span className="font-medium">{connection.email}</span>
           </span>
-          <span className="text-xs text-ink-faint">din {formatDate(connection.created_at)}</span>
+          <span className="text-xs text-slate-400">din {formatDate(connection.created_at)}</span>
           <button
             onClick={sync}
             disabled={busy}
@@ -90,7 +90,7 @@ export default function GmailSettings({
           <button
             onClick={disconnect}
             disabled={busy}
-            className="text-xs text-rust-600 hover:underline"
+            className="text-xs text-red-600 hover:underline"
           >
             Deconectează
           </button>

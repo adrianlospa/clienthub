@@ -35,7 +35,7 @@ export default function WorkspaceSwitcher({
       disabled={pending}
       onChange={(e) => switchTo(e.target.value)}
       aria-label="Workspace activ"
-      className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm font-medium text-ink outline-none focus:border-accent-500"
+      className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-900 outline-none focus:border-accent-500"
     >
       {workspaces.map((w) => (
         <option key={w.id} value={w.id}>

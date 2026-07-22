@@ -54,9 +54,9 @@ export default function InteractionsPanel({
   }
 
   return (
-    <section className="rounded-lg border border-line bg-surface p-5">
+    <section className="rounded-2xl bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-ink">Discuții</h2>
+        <h2 className="text-sm font-semibold text-slate-900">Discuții</h2>
         {!logging && (
           <button
             onClick={() => setLogging(true)}
@@ -68,13 +68,13 @@ export default function InteractionsPanel({
       </div>
 
       {logging && (
-        <form onSubmit={submit} className="mt-3 space-y-2 rounded-lg border border-line p-3">
+        <form onSubmit={submit} className="mt-3 space-y-2 rounded-lg border border-slate-100 p-3">
           <div className="flex flex-wrap gap-2">
             <select
               value={channel}
               onChange={(e) => setChannel(e.target.value as Interaction['channel'])}
               aria-label="Canal"
-              className="rounded-lg border border-line px-2 py-1.5 text-sm outline-none focus:border-accent-500"
+              className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none focus:border-accent-500"
             >
               {Object.entries(CHANNEL_LABELS).map(([value, label]) => (
                 <option key={value} value={value}>
@@ -86,7 +86,7 @@ export default function InteractionsPanel({
               value={direction}
               onChange={(e) => setDirection(e.target.value as 'in' | 'out')}
               aria-label="Direcție"
-              className="rounded-lg border border-line px-2 py-1.5 text-sm outline-none focus:border-accent-500"
+              className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none focus:border-accent-500"
             >
               <option value="out">Trimis</option>
               <option value="in">Primit</option>
@@ -97,14 +97,14 @@ export default function InteractionsPanel({
             onChange={(e) => setSummary(e.target.value)}
             placeholder="Ce s-a discutat…"
             rows={2}
-            className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
+            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
           />
-          {error && <p className="text-sm text-rust-700">{error}</p>}
+          {error && <p className="text-sm text-red-700">{error}</p>}
           <div className="flex justify-end gap-2">
             <button
               type="button"
               onClick={() => setLogging(false)}
-              className="rounded-lg px-3 py-1.5 text-xs text-ink-muted hover:bg-paper"
+              className="rounded-lg px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-50"
             >
               Anulează
             </button>
@@ -120,20 +120,20 @@ export default function InteractionsPanel({
       )}
 
       {interactions.length === 0 ? (
-        <p className="mt-3 text-sm text-ink-muted">Nicio discuție logată încă.</p>
+        <p className="mt-3 text-sm text-slate-500">Nicio discuție logată încă.</p>
       ) : (
         <ul className="mt-3 space-y-3">
           {interactions.map((i) => (
             <li key={i.id} className="text-sm">
               <div className="flex items-center gap-2">
-                <span className="rounded-full bg-paper px-2 py-0.5 text-xs text-ink-muted">
+                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
                   {CHANNEL_LABELS[i.channel]}
                 </span>
-                <span className="text-xs text-ink-faint">
+                <span className="text-xs text-slate-400">
                   {i.direction === 'out' ? 'trimis' : 'primit'} · {formatDate(i.occurred_at)}
                 </span>
               </div>
-              {i.summary && <p className="mt-1 text-ink">{i.summary}</p>}
+              {i.summary && <p className="mt-1 text-slate-700">{i.summary}</p>}
             </li>
           ))}
         </ul>

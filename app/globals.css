@@ -1,58 +1,19 @@
 @import 'tailwindcss';
 
 @theme {
-  /* "Registru" — ClientHub e un jurnal de relații cu clienții, nu un SaaS
-     generic. Paleta e verde-pădure + hârtie caldă, nu emerald plat pe gri rece. */
+  /* Accent emerald — deliberat diferit de indigo-ul din AdProfit, ca aplicațiile
+     să fie distinse dintr-o privire. */
+  --color-accent-50: #ecfdf5;
+  --color-accent-100: #d1fae5;
+  --color-accent-500: #10b981;
+  --color-accent-600: #059669;
+  --color-accent-700: #047857;
 
-  /* accent = pine, verde-pădure adânc. Numele "accent-*" e păstrat ca să
-     re-vopsească automat orice component existent (butoane, focus rings). */
-  --color-accent-50: #e9efe9;
-  --color-accent-100: #cfdccf;
-  --color-accent-500: #2c6e4f;
-  --color-accent-600: #1f5d42;
-  --color-accent-700: #164a34;
-
-  --color-ink: #1b2b22;
-  --color-ink-muted: #5b6459;
-  --color-ink-faint: #8a9186;
-
-  --color-paper: #f1efe4;
-  --color-surface: #fdfcf7;
-
-  --color-line: #dad4c0;
-  --color-line-strong: #c4bda3;
-
-  --color-gold-50: #faf3e3;
-  --color-gold-100: #f1e0b8;
-  --color-gold-600: #b8862f;
-  --color-gold-700: #8f6721;
-
-  --color-rust-50: #f6e9e5;
-  --color-rust-100: #ecd0c8;
-  --color-rust-600: #9c4130;
-  --color-rust-700: #7a3125;
-
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display), ui-serif, Georgia, serif;
-  --font-mono: var(--font-mono), ui-monospace, 'SF Mono', monospace;
+  --color-canvas: #f4f5f7;
 }
 
 body {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
+  background-color: var(--color-canvas);
+  color: #1e293b;
   -webkit-font-smoothing: antialiased;
-}
-
-h1, h2, h3 {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
-}
-
-/* Cifre tabelare — KPI-uri, sume, date — se aliniază pe coloană ca într-un
-   registru contabil real, nu proporțional ca text obișnuit. */
-.font-data,
-.tabular-nums {
-  font-family: var(--font-mono);
-  font-variant-numeric: tabular-nums;
 }

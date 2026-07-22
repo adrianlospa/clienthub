@@ -4,7 +4,6 @@ import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Activity, ActivityType, WorkspaceMember } from '@/lib/types'
 import { formatDate } from '@/lib/fmt'
-import StatusBadge from './StatusBadge'
 
 export default function ActivitiesPanel({
   clientId = null,
@@ -119,9 +118,9 @@ export default function ActivitiesPanel({
   }
 
   return (
-    <section className="rounded-lg border border-line bg-surface p-5">
+    <section className="rounded-2xl bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-ink">Activități</h2>
+        <h2 className="text-sm font-semibold text-slate-900">Activități</h2>
         {!creating && (
           <button
             onClick={() => setCreating(true)}
@@ -133,20 +132,20 @@ export default function ActivitiesPanel({
       </div>
 
       {creating && (
-        <form onSubmit={createActivity} className="mt-3 space-y-2 rounded-lg border border-line p-3">
+        <form onSubmit={createActivity} className="mt-3 space-y-2 rounded-lg border border-slate-100 p-3">
           <input
             autoFocus
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Titlu activitate"
-            className="w-full rounded-lg border border-line px-3 py-2 text-sm outline-none focus:border-accent-500"
+            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
           />
           <div className="flex flex-wrap gap-2">
             <select
               value={type}
               onChange={(e) => setType(e.target.value)}
               aria-label="Tip activitate"
-              className="rounded-lg border border-line px-2 py-1.5 text-sm outline-none focus:border-accent-500"
+              className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none focus:border-accent-500"
             >
               {activityTypes.map((t) => (
                 <option key={t.key} value={t.key}>
@@ -159,13 +158,13 @@ export default function ActivitiesPanel({
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
               aria-label="Termen"
-              className="rounded-lg border border-line px-2 py-1.5 text-sm outline-none focus:border-accent-500"
+              className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none focus:border-accent-500"
             />
             <select
               value={assignedTo}
               onChange={(e) => setAssignedTo(e.target.value)}
               aria-label="Responsabil"
-              className="rounded-lg border border-line px-2 py-1.5 text-sm outline-none focus:border-accent-500"
+              className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none focus:border-accent-500"
             >
               {members.map((m) => (
                 <option key={m.userId} value={m.userId}>
@@ -174,12 +173,12 @@ export default function ActivitiesPanel({
               ))}
             </select>
           </div>
-          {error && <p className="text-sm text-rust-700">{error}</p>}
+          {error && <p className="text-sm text-red-700">{error}</p>}
           <div className="flex justify-end gap-2">
             <button
               type="button"
               onClick={() => setCreating(false)}
-              className="rounded-lg px-3 py-1.5 text-xs text-ink-muted hover:bg-paper"
+              className="rounded-lg px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-50"
             >
               Anulează
             </button>
@@ -195,7 +194,7 @@ export default function ActivitiesPanel({
       )}
 
       {sorted.length === 0 ? (
-        <p className="mt-3 text-sm text-ink-muted">Nicio activitate încă.</p>
+        <p className="mt-3 text-sm text-slate-500">Nicio activitate încă.</p>
       ) : (
         <ul className="mt-3 space-y-2">
           {sorted.map((a) => {
@@ -206,7 +205,7 @@ export default function ActivitiesPanel({
             return (
               <li
                 key={a.id}
-                className={`flex flex-wrap items-center gap-2 border-b border-line py-2 text-sm last:border-0 ${
+                className={`flex flex-wrap items-center gap-2 border-b border-slate-50 py-2 text-sm last:border-0 ${
                   a.status === 'done' ? 'opacity-50' : ''
                 }`}
               >
@@ -217,17 +216,24 @@ export default function ActivitiesPanel({
                   onChange={(e) => updateStatus(a, e.target.checked ? 'done' : 'todo')}
                   aria-label={`Marchează „${a.title}" ca gata`}
                 />
-                <span className={a.status === 'done' ? 'line-through text-ink-muted' : 'text-ink'}>
+                <span className={a.status === 'done' ? 'line-through text-slate-500' : 'text-slate-800'}>
                   {a.title}
                 </span>
-                {t && <StatusBadge name={t.label} color={t.color} compact />}
+                {t && (
+                  <span
+                    className="rounded-full px-2 py-0.5 text-xs text-white"
+                    style={{ backgroundColor: t.color }}
+                  >
+                    {t.label}
+                  </span>
+                )}
                 {a.due_date && (
-                  <span className={`text-xs ${overdue ? 'font-medium text-rust-600' : 'text-ink-faint'}`}>
+                  <span className={`text-xs ${overdue ? 'font-medium text-red-600' : 'text-slate-400'}`}>
                     {formatDate(a.due_date)}
                   </span>
                 )}
                 {assignee && (
-                  <span className="text-xs text-ink-faint">
+                  <span className="text-xs text-slate-400">
                     {assignee.userId === currentUserId ? 'eu' : assignee.email}
                   </span>
                 )}
@@ -237,8 +243,8 @@ export default function ActivitiesPanel({
                     disabled={busyId === a.id}
                     className={`rounded-full px-2 py-0.5 text-xs ${
                       a.waiting_on === 'client'
-                        ? 'bg-gold-100 text-gold-700'
-                        : 'bg-paper text-ink-muted'
+                        ? 'bg-amber-100 text-amber-700'
+                        : 'bg-slate-100 text-slate-500'
                     }`}
                   >
                     {a.waiting_on === 'client' ? 'așteaptă clientul' : 'aștept eu'}
@@ -247,7 +253,7 @@ export default function ActivitiesPanel({
                 <button
                   onClick={() => remove(a)}
                   disabled={busyId === a.id}
-                  className="ml-auto shrink-0 text-xs text-rust-600 hover:underline"
+                  className="ml-auto shrink-0 text-xs text-red-600 hover:underline"
                 >
                   Șterge
                 </button>

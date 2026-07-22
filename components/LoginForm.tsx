@@ -74,13 +74,13 @@ export default function LoginForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-lg border border-line bg-surface p-8">
-      <h1 className="text-2xl font-semibold text-ink">ClientHub</h1>
-      <p className="mt-1 text-sm text-ink-muted">
+    <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-sm">
+      <h1 className="text-2xl font-semibold text-slate-900">ClientHub</h1>
+      <p className="mt-1 text-sm text-slate-500">
         {mode === 'login' ? 'Autentifică-te ca să continui.' : 'Creează-ți contul.'}
       </p>
 
-      <label className="mt-6 block text-sm font-medium text-ink">
+      <label className="mt-6 block text-sm font-medium text-slate-700">
         Email
         <input
           type="email"
@@ -88,11 +88,11 @@ export default function LoginForm() {
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-ink outline-none focus:border-accent-500 focus:ring-2 focus:ring-accent-100"
+          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-slate-900 outline-none focus:border-accent-500 focus:ring-2 focus:ring-accent-100"
         />
       </label>
 
-      <label className="mt-4 block text-sm font-medium text-ink">
+      <label className="mt-4 block text-sm font-medium text-slate-700">
         Parolă
         <input
           type="password"
@@ -101,12 +101,12 @@ export default function LoginForm() {
           autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 w-full rounded-lg border border-line px-3 py-2 text-ink outline-none focus:border-accent-500 focus:ring-2 focus:ring-accent-100"
+          className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-slate-900 outline-none focus:border-accent-500 focus:ring-2 focus:ring-accent-100"
         />
       </label>
 
       {error && (
-        <p className="mt-4 rounded-lg bg-rust-50 px-3 py-2 text-sm text-rust-700">{error}</p>
+        <p className="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">{error}</p>
       )}
 
       <button
@@ -123,22 +123,22 @@ export default function LoginForm() {
           setMode(mode === 'login' ? 'signup' : 'login')
           setError(null)
         }}
-        className="mt-4 w-full text-sm text-ink-muted hover:text-ink"
+        className="mt-4 w-full text-sm text-slate-500 hover:text-slate-700"
       >
         {mode === 'login' ? 'Ai invitație? Creează cont' : 'Ai deja cont? Autentifică-te'}
       </button>
 
-      <div className="mt-6 flex items-center gap-3 text-xs text-ink-faint">
-        <div className="h-px flex-1 bg-paper" />
+      <div className="mt-6 flex items-center gap-3 text-xs text-slate-400">
+        <div className="h-px flex-1 bg-slate-200" />
         sau
-        <div className="h-px flex-1 bg-paper" />
+        <div className="h-px flex-1 bg-slate-200" />
       </div>
 
       <button
         type="button"
         onClick={handleGoogleSignIn}
         disabled={googleLoading}
-        className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-line bg-surface px-4 py-2.5 text-sm font-medium text-ink transition hover:bg-paper disabled:opacity-60"
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-60"
       >
         <GoogleIcon />
         {googleLoading ? 'Se redirecționează…' : 'Continuă cu Google'}
