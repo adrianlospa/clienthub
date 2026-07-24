@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, type MouseEvent } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function GmailComposeModal({
@@ -17,7 +17,6 @@ export default function GmailComposeModal({
   const [body, setBody] = useState('')
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const backdropMouseDown = useRef(false)
 
   async function send(e: React.FormEvent) {
     e.preventDefault()
@@ -42,15 +41,7 @@ export default function GmailComposeModal({
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/40 p-4"
-      onMouseDown={(e: MouseEvent) => {
-        backdropMouseDown.current = e.target === e.currentTarget
-      }}
-      onClick={(e: MouseEvent) => {
-        if (backdropMouseDown.current && e.target === e.currentTarget) onClose()
-      }}
-    >
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/40 p-4">
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={send}

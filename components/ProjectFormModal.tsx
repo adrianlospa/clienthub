@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, type MouseEvent } from 'react'
+import { useState } from 'react'
 import type { Project } from '@/lib/types'
 
 const TYPE_LABELS: Record<Project['type'], string> = {
@@ -25,7 +25,6 @@ export default function ProjectFormModal({
   const [description, setDescription] = useState(project?.description ?? '')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const backdropMouseDown = useRef(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -49,15 +48,7 @@ export default function ProjectFormModal({
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/40 p-4"
-      onMouseDown={(e: MouseEvent) => {
-        backdropMouseDown.current = e.target === e.currentTarget
-      }}
-      onClick={(e: MouseEvent) => {
-        if (backdropMouseDown.current && e.target === e.currentTarget) onClose()
-      }}
-    >
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/40 p-4">
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}

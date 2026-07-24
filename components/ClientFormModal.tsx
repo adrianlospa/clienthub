@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, type MouseEvent } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Client, DuplicateMatch, Status } from '@/lib/types'
 
 type Draft = {
@@ -64,7 +64,6 @@ export default function ClientFormModal({
   const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const backdropMouseDown = useRef(false)
 
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) =>
     setDraft((d) => ({ ...d, [key]: value }))
@@ -148,15 +147,7 @@ export default function ClientFormModal({
   const showDuplicates = duplicates.length > 0 && !dismissedDuplicates
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/40 p-4"
-      onMouseDown={(e: MouseEvent) => {
-        backdropMouseDown.current = e.target === e.currentTarget
-      }}
-      onClick={(e: MouseEvent) => {
-        if (backdropMouseDown.current && e.target === e.currentTarget) onClose()
-      }}
-    >
+    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-900/40 p-4">
       <form
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
