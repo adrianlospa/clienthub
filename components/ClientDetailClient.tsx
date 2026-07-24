@@ -57,6 +57,7 @@ export default function ClientDetailClient({
   const [editing, setEditing] = useState(false)
   const [savingStatus, setSavingStatus] = useState(false)
   const [composing, setComposing] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const statusById = useMemo(() => new Map(statuses.map((s) => [s.id, s])), [statuses])
   const status = client.current_status_id ? statusById.get(client.current_status_id) : null
@@ -75,6 +76,20 @@ export default function ClientDetailClient({
       if (res.ok) router.refresh()
     } finally {
       setSavingStatus(false)
+    }
+  }
+
+  async function deleteClient() {
+    if (!confirm(`Ștergi definitiv clientul „${client.name}"? Nu poate fi anulat.`)) return
+    setDeleting(true)
+    try {
+      const res = await fetch(`/api/clients/${client.id}`, { method: 'DELETE' })
+      if (res.ok) {
+        router.push('/clienti')
+        router.refresh()
+      }
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -97,6 +112,13 @@ export default function ClientDetailClient({
           className="ml-auto rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
         >
           Editează
+        </button>
+        <button
+          onClick={deleteClient}
+          disabled={deleting}
+          className="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-60"
+        >
+          {deleting ? 'Se șterge…' : 'Șterge'}
         </button>
       </div>
 

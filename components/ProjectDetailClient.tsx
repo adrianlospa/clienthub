@@ -46,6 +46,7 @@ export default function ProjectDetailClient({
   const router = useRouter()
   const [editing, setEditing] = useState(false)
   const [savingStatus, setSavingStatus] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   async function changeStatus(status: Project['status']) {
     setSavingStatus(true)
@@ -58,6 +59,20 @@ export default function ProjectDetailClient({
       if (res.ok) router.refresh()
     } finally {
       setSavingStatus(false)
+    }
+  }
+
+  async function deleteProject() {
+    if (!confirm(`Ștergi definitiv proiectul „${project.name}"? Nu poate fi anulat.`)) return
+    setDeleting(true)
+    try {
+      const res = await fetch(`/api/projects/${project.id}`, { method: 'DELETE' })
+      if (res.ok) {
+        router.push('/proiecte')
+        router.refresh()
+      }
+    } finally {
+      setDeleting(false)
     }
   }
 
@@ -77,6 +92,13 @@ export default function ProjectDetailClient({
           className="ml-auto rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
         >
           Editează
+        </button>
+        <button
+          onClick={deleteProject}
+          disabled={deleting}
+          className="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-50 disabled:opacity-60"
+        >
+          {deleting ? 'Se șterge…' : 'Șterge'}
         </button>
       </div>
 
