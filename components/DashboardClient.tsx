@@ -284,6 +284,11 @@ function ActivityGroup({
                 {a.clients.name}
               </Link>
             )}
+            {a.projects?.name && (
+              <Link href={`/proiecte/${a.project_id}`} className="text-xs text-accent-700 hover:underline">
+                {a.projects.name}
+              </Link>
+            )}
             <span className={`text-xs ${overdue ? 'font-medium text-red-600' : 'text-slate-400'}`}>
               {formatDate(a.due_date)}
             </span>
@@ -301,6 +306,11 @@ function WaitingRow({ activity }: { activity: ActivityWithClient }) {
       {activity.clients?.name && (
         <Link href={`/clienti/${activity.client_id}`} className="text-xs text-accent-700 hover:underline">
           {activity.clients.name}
+        </Link>
+      )}
+      {activity.projects?.name && (
+        <Link href={`/proiecte/${activity.project_id}`} className="text-xs text-accent-700 hover:underline">
+          {activity.projects.name}
         </Link>
       )}
       <span className="ml-auto text-xs text-slate-400">{relativeDays(activity.due_date ?? activity.created_at)}</span>

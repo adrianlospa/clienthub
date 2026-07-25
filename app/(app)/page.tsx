@@ -14,7 +14,10 @@ import {
 import DashboardClient from '@/components/DashboardClient'
 import type { Activity, Client, PortfolioRanking, Status, StatusHistoryEntry } from '@/lib/types'
 
-export type ActivityWithClient = Activity & { clients: { name: string } | null }
+export type ActivityWithClient = Activity & {
+  clients: { name: string } | null
+  projects: { name: string } | null
+}
 export type RankingWithClient = PortfolioRanking & { clients: { name: string } | null }
 
 export default async function TodayPage() {
@@ -45,7 +48,7 @@ export default async function TodayPage() {
       .eq('workspace_id', workspaceId)
       .order('sort_order', { ascending: true }),
     supabase.from('clients').select('*').eq('workspace_id', workspaceId),
-    supabase.from('activities').select('*, clients(name)').eq('workspace_id', workspaceId),
+    supabase.from('activities').select('*, clients(name), projects(name)').eq('workspace_id', workspaceId),
     supabase
       .from('status_history')
       .select('*')
