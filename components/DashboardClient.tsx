@@ -74,7 +74,7 @@ export default function DashboardClient({
         )}
       </div>
 
-      <div className="mt-6 grid grid-cols-4 gap-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
+      <div className="mt-6 grid grid-cols-4 gap-4 max-lg:grid-cols-2">
         <KpiCard label="Clienți" value={String(kpis.totalClients)} />
         <KpiCard label="Oportunități active" value={String(kpis.activeOpportunities)} />
         <KpiCard label="Rată conversie" value={`${kpis.conversionRate}%`} sub={`${kpis.won} câștigați / ${kpis.lost} pierduți`} />
@@ -114,12 +114,14 @@ export default function DashboardClient({
         ) : (
           <ul className="mt-3 space-y-2">
             {overdueFollowUps.map((c) => (
-              <li key={c.id} className="flex flex-wrap items-center gap-3 border-b border-slate-50 py-2 last:border-0">
-                <Link href={`/clienti/${c.id}`} className="font-medium text-slate-900 hover:text-accent-700">
-                  {c.name}
-                </Link>
-                <span className="text-sm text-slate-500">{c.next_step_description ?? '—'}</span>
-                <span className="ml-auto text-sm font-medium text-red-600">
+              <li key={c.id} className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-slate-50 py-2 last:border-0">
+                <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+                  <Link href={`/clienti/${c.id}`} className="shrink-0 font-medium text-slate-900 hover:text-accent-700">
+                    {c.name}
+                  </Link>
+                  <span className="min-w-0 break-words text-sm text-slate-500">{c.next_step_description ?? '—'}</span>
+                </div>
+                <span className="shrink-0 text-sm font-medium text-red-600">
                   {formatDate(c.next_step_date)} · {daysOverdue(c.next_step_date)} zile
                 </span>
               </li>
@@ -271,27 +273,30 @@ function ActivityGroup({
       </h3>
       <ul className="mt-1 space-y-1.5">
         {items.map((a) => (
-          <li key={a.id} className="flex flex-wrap items-center gap-2 text-sm">
+          <li key={a.id} className="flex items-start gap-2 text-sm">
             <input
               type="checkbox"
               disabled={busyId === a.id}
               onChange={() => onDone(a.id)}
               aria-label={`Marchează „${a.title}" ca gata`}
+              className="mt-0.5 shrink-0"
             />
-            <span className="text-slate-800">{a.title}</span>
-            {a.clients?.name && (
-              <Link href={`/clienti/${a.client_id}`} className="text-xs text-accent-700 hover:underline">
-                {a.clients.name}
-              </Link>
-            )}
-            {a.projects?.name && (
-              <Link href={`/proiecte/${a.project_id}`} className="text-xs text-accent-700 hover:underline">
-                {a.projects.name}
-              </Link>
-            )}
-            <span className={`text-xs ${overdue ? 'font-medium text-red-600' : 'text-slate-400'}`}>
-              {formatDate(a.due_date)}
-            </span>
+            <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
+              <span className="min-w-0 break-words text-slate-800">{a.title}</span>
+              {a.clients?.name && (
+                <Link href={`/clienti/${a.client_id}`} className="shrink-0 text-xs text-accent-700 hover:underline">
+                  {a.clients.name}
+                </Link>
+              )}
+              {a.projects?.name && (
+                <Link href={`/proiecte/${a.project_id}`} className="shrink-0 text-xs text-accent-700 hover:underline">
+                  {a.projects.name}
+                </Link>
+              )}
+              <span className={`shrink-0 text-xs ${overdue ? 'font-medium text-red-600' : 'text-slate-400'}`}>
+                {formatDate(a.due_date)}
+              </span>
+            </div>
           </li>
         ))}
       </ul>
@@ -301,19 +306,21 @@ function ActivityGroup({
 
 function WaitingRow({ activity }: { activity: ActivityWithClient }) {
   return (
-    <li className="flex flex-wrap items-center gap-2 text-sm">
-      <span className="text-slate-800">{activity.title}</span>
-      {activity.clients?.name && (
-        <Link href={`/clienti/${activity.client_id}`} className="text-xs text-accent-700 hover:underline">
-          {activity.clients.name}
-        </Link>
-      )}
-      {activity.projects?.name && (
-        <Link href={`/proiecte/${activity.project_id}`} className="text-xs text-accent-700 hover:underline">
-          {activity.projects.name}
-        </Link>
-      )}
-      <span className="ml-auto text-xs text-slate-400">{relativeDays(activity.due_date ?? activity.created_at)}</span>
+    <li className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-sm">
+      <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+        <span className="min-w-0 break-words text-slate-800">{activity.title}</span>
+        {activity.clients?.name && (
+          <Link href={`/clienti/${activity.client_id}`} className="shrink-0 text-xs text-accent-700 hover:underline">
+            {activity.clients.name}
+          </Link>
+        )}
+        {activity.projects?.name && (
+          <Link href={`/proiecte/${activity.project_id}`} className="shrink-0 text-xs text-accent-700 hover:underline">
+            {activity.projects.name}
+          </Link>
+        )}
+      </div>
+      <span className="shrink-0 text-xs text-slate-400">{relativeDays(activity.due_date ?? activity.created_at)}</span>
     </li>
   )
 }

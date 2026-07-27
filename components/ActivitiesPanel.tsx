@@ -205,7 +205,7 @@ export default function ActivitiesPanel({
             return (
               <li
                 key={a.id}
-                className={`flex flex-wrap items-center gap-2 border-b border-slate-50 py-2 text-sm last:border-0 ${
+                className={`flex items-start gap-2 border-b border-slate-50 py-2 text-sm last:border-0 ${
                   a.status === 'done' ? 'opacity-50' : ''
                 }`}
               >
@@ -215,48 +215,51 @@ export default function ActivitiesPanel({
                   disabled={busyId === a.id}
                   onChange={(e) => updateStatus(a, e.target.checked ? 'done' : 'todo')}
                   aria-label={`Marchează „${a.title}" ca gata`}
+                  className="mt-0.5 shrink-0"
                 />
-                <span className={a.status === 'done' ? 'line-through text-slate-500' : 'text-slate-800'}>
-                  {a.title}
-                </span>
-                {t && (
-                  <span
-                    className="rounded-full px-2 py-0.5 text-xs text-white"
-                    style={{ backgroundColor: t.color }}
-                  >
-                    {t.label}
+                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
+                  <span className={`min-w-0 break-words ${a.status === 'done' ? 'line-through text-slate-500' : 'text-slate-800'}`}>
+                    {a.title}
                   </span>
-                )}
-                {a.due_date && (
-                  <span className={`text-xs ${overdue ? 'font-medium text-red-600' : 'text-slate-400'}`}>
-                    {formatDate(a.due_date)}
-                  </span>
-                )}
-                {assignee && (
-                  <span className="text-xs text-slate-400">
-                    {assignee.userId === currentUserId ? 'eu' : assignee.email}
-                  </span>
-                )}
-                {clientId && (
+                  {t && (
+                    <span
+                      className="shrink-0 rounded-full px-2 py-0.5 text-xs text-white"
+                      style={{ backgroundColor: t.color }}
+                    >
+                      {t.label}
+                    </span>
+                  )}
+                  {a.due_date && (
+                    <span className={`shrink-0 text-xs ${overdue ? 'font-medium text-red-600' : 'text-slate-400'}`}>
+                      {formatDate(a.due_date)}
+                    </span>
+                  )}
+                  {assignee && (
+                    <span className="shrink-0 text-xs text-slate-400">
+                      {assignee.userId === currentUserId ? 'eu' : assignee.email}
+                    </span>
+                  )}
+                  {clientId && (
+                    <button
+                      onClick={() => toggleWaitingOn(a)}
+                      disabled={busyId === a.id}
+                      className={`shrink-0 rounded-full px-2 py-0.5 text-xs ${
+                        a.waiting_on === 'client'
+                          ? 'bg-amber-100 text-amber-700'
+                          : 'bg-slate-100 text-slate-500'
+                      }`}
+                    >
+                      {a.waiting_on === 'client' ? 'așteaptă clientul' : 'aștept eu'}
+                    </button>
+                  )}
                   <button
-                    onClick={() => toggleWaitingOn(a)}
+                    onClick={() => remove(a)}
                     disabled={busyId === a.id}
-                    className={`rounded-full px-2 py-0.5 text-xs ${
-                      a.waiting_on === 'client'
-                        ? 'bg-amber-100 text-amber-700'
-                        : 'bg-slate-100 text-slate-500'
-                    }`}
+                    className="ml-auto shrink-0 text-xs text-red-600 hover:underline"
                   >
-                    {a.waiting_on === 'client' ? 'așteaptă clientul' : 'aștept eu'}
+                    Șterge
                   </button>
-                )}
-                <button
-                  onClick={() => remove(a)}
-                  disabled={busyId === a.id}
-                  className="ml-auto shrink-0 text-xs text-red-600 hover:underline"
-                >
-                  Șterge
-                </button>
+                </div>
               </li>
             )
           })}

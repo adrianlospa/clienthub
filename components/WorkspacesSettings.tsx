@@ -98,9 +98,9 @@ export default function WorkspacesSettings({ workspaces }: { workspaces: Workspa
               </>
             ) : (
               <>
-                <span className="min-w-32 font-medium text-slate-800">{w.name}</span>
-                <span className="text-xs text-slate-400">{w.slug}</span>
-                <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+                <span className="min-w-0 break-words font-medium text-slate-800">{w.name}</span>
+                <span className="shrink-0 text-xs text-slate-400">{w.slug}</span>
+                <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
                   {w.role === 'admin' ? 'admin' : 'membru'}
                 </span>
                 {w.role === 'admin' && (
@@ -109,7 +109,7 @@ export default function WorkspacesSettings({ workspaces }: { workspaces: Workspa
                       setEditingId(w.id)
                       setEditingName(w.name)
                     }}
-                    className="ml-auto text-xs text-slate-500 hover:underline"
+                    className="ml-auto shrink-0 text-xs text-slate-500 hover:underline"
                   >
                     Redenumește
                   </button>

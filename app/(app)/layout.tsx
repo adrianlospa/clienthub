@@ -45,7 +45,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         email={user.email ?? ''}
         notifications={notifications ?? []}
       />
-      <main className="flex-1 px-6 py-8 max-md:px-4">{children}</main>
+      <main className="min-w-0 flex-1 px-6 py-8 max-md:px-4">{children}</main>
     </div>
   )
 }
