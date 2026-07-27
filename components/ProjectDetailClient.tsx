@@ -1,21 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import type { Activity, ActivityType, ClientDocument, Comment, Project, WorkspaceMember } from '@/lib/types'
+import type { Activity, ActivityType, ClientDocument, Comment, Project, ProjectType, WorkspaceMember } from '@/lib/types'
 import ProjectFormModal from './ProjectFormModal'
 import ActivitiesPanel from './ActivitiesPanel'
 import CommentsPanel from './CommentsPanel'
 import DocumentsPanel from './DocumentsPanel'
-
-const TYPE_LABELS: Record<Project['type'], string> = {
-  website: 'Website',
-  video: 'Video',
-  course: 'Curs',
-  campaign: 'Campanie',
-  internal: 'Intern',
-}
 
 const STATUS_LABELS: Record<Project['status'], string> = {
   active: 'Activ',
@@ -33,6 +25,7 @@ export default function ProjectDetailClient({
   documents,
   members,
   currentUserId,
+  projectTypes,
 }: {
   workspaceId: string
   project: Project
@@ -42,11 +35,16 @@ export default function ProjectDetailClient({
   documents: ClientDocument[]
   members: WorkspaceMember[]
   currentUserId: string
+  projectTypes: ProjectType[]
 }) {
   const router = useRouter()
   const [editing, setEditing] = useState(false)
   const [savingStatus, setSavingStatus] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const typeLabel = useMemo(
+    () => projectTypes.find((t) => t.key === project.type)?.label ?? project.type,
+    [projectTypes, project.type]
+  )
 
   async function changeStatus(status: Project['status']) {
     setSavingStatus(true)
@@ -85,7 +83,7 @@ export default function ProjectDetailClient({
       <div className="mt-3 flex flex-wrap items-start gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-slate-900">{project.name}</h1>
-          <p className="text-slate-500">{TYPE_LABELS[project.type]}</p>
+          <p className="text-slate-500">{typeLabel}</p>
         </div>
         <button
           onClick={() => setEditing(true)}
@@ -152,6 +150,7 @@ export default function ProjectDetailClient({
       {editing && (
         <ProjectFormModal
           project={project}
+          projectTypes={projectTypes}
           onClose={() => setEditing(false)}
           onSaved={() => {
             setEditing(false)

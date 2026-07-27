@@ -27,6 +27,14 @@ export const DEFAULT_ACTIVITY_TYPES = [
   { key: 'other', label: 'Altele', color: '#64748b', sort_order: 110 },
 ] as const
 
+export const DEFAULT_PROJECT_TYPES = [
+  { key: 'website', label: 'Website', color: '#60a5fa', sort_order: 10 },
+  { key: 'video', label: 'Video', color: '#f472b6', sort_order: 20 },
+  { key: 'course', label: 'Curs', color: '#34d399', sort_order: 30 },
+  { key: 'campaign', label: 'Campanie', color: '#22d3ee', sort_order: 40 },
+  { key: 'internal', label: 'Intern', color: '#94a3b8', sort_order: 50 },
+] as const
+
 export const DEFAULT_SETTINGS = {
   currency: 'RON',
   vat_rate: '0.21',
@@ -39,6 +47,9 @@ export async function seedWorkspaceDefaults(admin: any, workspaceId: string) {
   await admin
     .from('activity_types')
     .insert(DEFAULT_ACTIVITY_TYPES.map((t) => ({ ...t, workspace_id: workspaceId })))
+  await admin
+    .from('project_types')
+    .insert(DEFAULT_PROJECT_TYPES.map((t) => ({ ...t, workspace_id: workspaceId })))
   await admin
     .from('settings')
     .insert(

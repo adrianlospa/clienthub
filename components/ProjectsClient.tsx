@@ -1,19 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import type { Project } from '@/lib/types'
+import type { Project, ProjectType } from '@/lib/types'
 import { formatDate } from '@/lib/fmt'
 import ProjectFormModal from './ProjectFormModal'
-
-const TYPE_LABELS: Record<Project['type'], string> = {
-  website: 'Website',
-  video: 'Video',
-  course: 'Curs',
-  campaign: 'Campanie',
-  internal: 'Intern',
-}
 
 const STATUS_LABELS: Record<Project['status'], string> = {
   active: 'Activ',
@@ -22,9 +14,16 @@ const STATUS_LABELS: Record<Project['status'], string> = {
   cancelled: 'Anulat',
 }
 
-export default function ProjectsClient({ projects }: { projects: Project[] }) {
+export default function ProjectsClient({
+  projects,
+  projectTypes,
+}: {
+  projects: Project[]
+  projectTypes: ProjectType[]
+}) {
   const router = useRouter()
   const [creating, setCreating] = useState(false)
+  const typeByKey = useMemo(() => new Map(projectTypes.map((t) => [t.key, t])), [projectTypes])
 
   return (
     <>
@@ -73,7 +72,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
                       {p.name}
                     </Link>
                   </td>
-                  <td className="px-4 py-3 text-slate-600">{TYPE_LABELS[p.type]}</td>
+                  <td className="px-4 py-3 text-slate-600">{typeByKey.get(p.type)?.label ?? p.type}</td>
                   <td className="px-4 py-3">
                     <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs text-slate-600">
                       {STATUS_LABELS[p.status]}
@@ -89,6 +88,7 @@ export default function ProjectsClient({ projects }: { projects: Project[] }) {
 
       {creating && (
         <ProjectFormModal
+          projectTypes={projectTypes}
           onClose={() => setCreating(false)}
           onSaved={() => {
             setCreating(false)

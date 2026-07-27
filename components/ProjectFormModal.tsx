@@ -1,27 +1,21 @@
 'use client'
 
 import { useState } from 'react'
-import type { Project } from '@/lib/types'
-
-const TYPE_LABELS: Record<Project['type'], string> = {
-  website: 'Website',
-  video: 'Video',
-  course: 'Curs',
-  campaign: 'Campanie',
-  internal: 'Intern',
-}
+import type { Project, ProjectType } from '@/lib/types'
 
 export default function ProjectFormModal({
   project = null,
+  projectTypes,
   onClose,
   onSaved,
 }: {
   project?: Project | null
+  projectTypes: ProjectType[]
   onClose: () => void
   onSaved: () => void
 }) {
   const [name, setName] = useState(project?.name ?? '')
-  const [type, setType] = useState<Project['type']>(project?.type ?? 'website')
+  const [type, setType] = useState(project?.type ?? projectTypes[0]?.key ?? '')
   const [description, setDescription] = useState(project?.description ?? '')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -73,12 +67,12 @@ export default function ProjectFormModal({
           Tip
           <select
             value={type}
-            onChange={(e) => setType(e.target.value as Project['type'])}
+            onChange={(e) => setType(e.target.value)}
             className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
           >
-            {Object.entries(TYPE_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
+            {projectTypes.map((t) => (
+              <option key={t.key} value={t.key}>
+                {t.label}
               </option>
             ))}
           </select>

@@ -4,7 +4,7 @@ import { getWorkspaceId } from '@/lib/workspace'
 import { getWorkspaceMembers } from '@/lib/workspace-members'
 import { getCurrentUser } from '@/lib/auth'
 import ProjectDetailClient from '@/components/ProjectDetailClient'
-import type { Activity, ActivityType, ClientDocument, Comment, Project } from '@/lib/types'
+import type { Activity, ActivityType, ClientDocument, Comment, Project, ProjectType } from '@/lib/types'
 
 export default async function ProjectDetailPage({
   params,
@@ -23,7 +23,7 @@ export default async function ProjectDetailPage({
   const project = projectRes.data
   if (!project) notFound()
 
-  const [activitiesRes, activityTypesRes, commentsRes, documentsRes, members] = await Promise.all([
+  const [activitiesRes, activityTypesRes, commentsRes, documentsRes, members, projectTypesRes] = await Promise.all([
     supabase.from('activities').select('*').eq('project_id', id).order('due_date', { ascending: true }),
     supabase
       .from('activity_types')
@@ -43,6 +43,11 @@ export default async function ProjectDetailPage({
       .eq('parent_id', id)
       .order('uploaded_at', { ascending: false }),
     getWorkspaceMembers(workspaceId),
+    supabase
+      .from('project_types')
+      .select('*')
+      .eq('workspace_id', workspaceId)
+      .order('sort_order', { ascending: true }),
   ])
 
   return (
@@ -55,6 +60,7 @@ export default async function ProjectDetailPage({
       documents={(documentsRes.data ?? []) as ClientDocument[]}
       members={members}
       currentUserId={user!.id}
+      projectTypes={(projectTypesRes.data ?? []) as ProjectType[]}
     />
   )
 }

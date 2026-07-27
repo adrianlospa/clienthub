@@ -2,11 +2,12 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import type { GmailConnectionPublic, Status } from '@/lib/types'
+import type { GmailConnectionPublic, ProjectType, Status } from '@/lib/types'
 import type { WorkspaceOption } from '@/lib/workspace'
 import WorkspacesSettings from './WorkspacesSettings'
 import NotificationSettings from './NotificationSettings'
 import GmailSettings from './GmailSettings'
+import ProjectTypesSettings from './ProjectTypesSettings'
 
 export default function SettingsClient({
   statuses,
@@ -15,6 +16,8 @@ export default function SettingsClient({
   digestEnabled,
   gmailConnection,
   gmailStatus,
+  projectTypes,
+  projectTypeUsage,
 }: {
   statuses: Status[]
   usage: Record<string, number>
@@ -22,6 +25,8 @@ export default function SettingsClient({
   digestEnabled: boolean
   gmailConnection: GmailConnectionPublic | null
   gmailStatus?: string
+  projectTypes: ProjectType[]
+  projectTypeUsage: Record<string, number>
 }) {
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
@@ -29,6 +34,8 @@ export default function SettingsClient({
   const [newName, setNewName] = useState('')
   const [newPhase, setNewPhase] = useState<'pre_sale' | 'post_sale'>('pre_sale')
   const [newColor, setNewColor] = useState('#64748b')
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editingName, setEditingName] = useState('')
 
   async function call(url: string, method: string, body?: unknown) {
     setBusy(true)
@@ -72,6 +79,45 @@ export default function SettingsClient({
     await call(`/api/statuses/${status.id}`, 'DELETE')
   }
 
+  async function rename(status: Status) {
+    if (!editingName.trim() || editingName.trim() === status.name) {
+      setEditingId(null)
+      return
+    }
+    const ok = await call(`/api/statuses/${status.id}`, 'PATCH', { name: editingName.trim() })
+    if (ok) setEditingId(null)
+  }
+
+  async function move(status: Status, direction: 'up' | 'down') {
+    const idx = statuses.findIndex((s) => s.id === status.id)
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1
+    if (swapIdx < 0 || swapIdx >= statuses.length) return
+    const other = statuses[swapIdx]
+    setBusy(true)
+    setError(null)
+    try {
+      const [resA, resB] = await Promise.all([
+        fetch(`/api/statuses/${status.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sort_order: other.sort_order }),
+        }),
+        fetch(`/api/statuses/${other.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sort_order: status.sort_order }),
+        }),
+      ])
+      if (!resA.ok || !resB.ok) {
+        setError('Reordonarea a eșuat.')
+        return
+      }
+      router.refresh()
+    } finally {
+      setBusy(false)
+    }
+  }
+
   return (
     <>
       <h1 className="text-2xl font-semibold text-slate-900">Setări</h1>
@@ -97,8 +143,28 @@ export default function SettingsClient({
         <h2 className="text-sm font-semibold text-slate-900">Statusuri</h2>
 
         <div className="mt-4 space-y-2">
-          {statuses.map((s) => (
+          {statuses.map((s, idx) => (
             <div key={s.id} className="flex flex-wrap items-center gap-3 border-b border-slate-50 py-2 last:border-0">
+              <div className="flex shrink-0 flex-col">
+                <button
+                  type="button"
+                  onClick={() => move(s, 'up')}
+                  disabled={busy || idx === 0}
+                  aria-label={`Mută „${s.name}" mai sus`}
+                  className="leading-none text-slate-400 hover:text-slate-700 disabled:opacity-30"
+                >
+                  ▲
+                </button>
+                <button
+                  type="button"
+                  onClick={() => move(s, 'down')}
+                  disabled={busy || idx === statuses.length - 1}
+                  aria-label={`Mută „${s.name}" mai jos`}
+                  className="leading-none text-slate-400 hover:text-slate-700 disabled:opacity-30"
+                >
+                  ▼
+                </button>
+              </div>
               <input
                 type="color"
                 value={s.color}
@@ -107,7 +173,31 @@ export default function SettingsClient({
                 aria-label={`Culoare pentru ${s.name}`}
                 className="h-8 w-8 shrink-0 cursor-pointer rounded border border-slate-200"
               />
-              <span className="min-w-32 font-medium text-slate-800">{s.name}</span>
+              {editingId === s.id ? (
+                <input
+                  autoFocus
+                  value={editingName}
+                  onChange={(e) => setEditingName(e.target.value)}
+                  onBlur={() => rename(s)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') rename(s)
+                    if (e.key === 'Escape') setEditingId(null)
+                  }}
+                  className="min-w-0 rounded-lg border border-slate-200 px-2 py-1 text-sm outline-none focus:border-accent-500"
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingId(s.id)
+                    setEditingName(s.name)
+                  }}
+                  className="min-w-0 break-words text-left font-medium text-slate-800 hover:underline"
+                  title="Redenumește"
+                >
+                  {s.name}
+                </button>
+              )}
               <select
                 value={s.phase}
                 disabled={busy}
@@ -184,6 +274,10 @@ export default function SettingsClient({
           </button>
         </form>
       </section>
+
+      <div className="mt-6">
+        <ProjectTypesSettings projectTypes={projectTypes} usage={projectTypeUsage} />
+      </div>
     </>
   )
 }

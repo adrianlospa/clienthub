@@ -125,12 +125,21 @@ export type Project = {
   id: string
   workspace_id: string
   name: string
-  type: 'website' | 'video' | 'course' | 'campaign' | 'internal'
+  type: string
   status: 'active' | 'paused' | 'done' | 'cancelled'
   description: string | null
   created_by: string | null
   created_at: string
   updated_at: string
+}
+
+export type ProjectType = {
+  id: string
+  workspace_id: string
+  key: string
+  label: string
+  color: string
+  sort_order: number
 }
 
 export type WorkspaceMember = {
