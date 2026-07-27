@@ -30,6 +30,14 @@ export default function ActivitiesPanel({
   const [error, setError] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
 
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editTitle, setEditTitle] = useState('')
+  const [editType, setEditType] = useState('')
+  const [editDueDate, setEditDueDate] = useState('')
+  const [editAssignedTo, setEditAssignedTo] = useState('')
+  const [editSaving, setEditSaving] = useState(false)
+  const [editError, setEditError] = useState<string | null>(null)
+
   const typeByKey = useMemo(() => new Map(activityTypes.map((t) => [t.key, t])), [activityTypes])
   const memberByUserId = useMemo(() => new Map(members.map((m) => [m.userId, m])), [members])
 
@@ -103,6 +111,42 @@ export default function ActivitiesPanel({
       if (res.ok) router.refresh()
     } finally {
       setBusyId(null)
+    }
+  }
+
+  function startEditing(activity: Activity) {
+    setEditingId(activity.id)
+    setEditTitle(activity.title)
+    setEditType(activity.type)
+    setEditDueDate(activity.due_date ?? '')
+    setEditAssignedTo(activity.assigned_to ?? '')
+    setEditError(null)
+  }
+
+  async function saveEdit(activity: Activity) {
+    if (!editTitle.trim()) return
+    setEditSaving(true)
+    setEditError(null)
+    try {
+      const res = await fetch(`/api/activities/${activity.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: editTitle.trim(),
+          type: editType,
+          due_date: editDueDate || null,
+          assigned_to: editAssignedTo || null,
+        }),
+      })
+      const body = await res.json()
+      if (!res.ok) {
+        setEditError(body.error ?? 'Salvarea a eșuat.')
+        return
+      }
+      setEditingId(null)
+      router.refresh()
+    } finally {
+      setEditSaving(false)
     }
   }
 
@@ -202,6 +246,72 @@ export default function ActivitiesPanel({
             const assignee = a.assigned_to ? memberByUserId.get(a.assigned_to) : null
             const overdue =
               a.status !== 'done' && a.due_date && new Date(a.due_date) < new Date(new Date().toDateString())
+            if (editingId === a.id) {
+              return (
+                <li key={a.id} className="border-b border-slate-50 py-2 last:border-0">
+                  <div className="space-y-2 rounded-lg border border-slate-100 p-3">
+                    <input
+                      autoFocus
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      placeholder="Titlu activitate"
+                      className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-accent-500"
+                    />
+                    <div className="flex flex-wrap gap-2">
+                      <select
+                        value={editType}
+                        onChange={(e) => setEditType(e.target.value)}
+                        aria-label="Tip activitate"
+                        className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none focus:border-accent-500"
+                      >
+                        {activityTypes.map((at) => (
+                          <option key={at.key} value={at.key}>
+                            {at.label}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        type="date"
+                        value={editDueDate}
+                        onChange={(e) => setEditDueDate(e.target.value)}
+                        aria-label="Termen"
+                        className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none focus:border-accent-500"
+                      />
+                      <select
+                        value={editAssignedTo}
+                        onChange={(e) => setEditAssignedTo(e.target.value)}
+                        aria-label="Responsabil"
+                        className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none focus:border-accent-500"
+                      >
+                        {members.map((m) => (
+                          <option key={m.userId} value={m.userId}>
+                            {m.userId === currentUserId ? 'Eu' : m.email}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {editError && <p className="text-sm text-red-700">{editError}</p>}
+                    <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setEditingId(null)}
+                        className="rounded-lg px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-50"
+                      >
+                        Anulează
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => saveEdit(a)}
+                        disabled={editSaving}
+                        className="rounded-lg bg-accent-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-accent-700 disabled:opacity-60"
+                      >
+                        {editSaving ? 'Se salvează…' : 'Salvează'}
+                      </button>
+                    </div>
+                  </div>
+                </li>
+              )
+            }
             return (
               <li
                 key={a.id}
@@ -253,9 +363,15 @@ export default function ActivitiesPanel({
                     </button>
                   )}
                   <button
+                    onClick={() => startEditing(a)}
+                    className="ml-auto shrink-0 text-xs text-accent-700 hover:underline"
+                  >
+                    Editează
+                  </button>
+                  <button
                     onClick={() => remove(a)}
                     disabled={busyId === a.id}
-                    className="ml-auto shrink-0 text-xs text-red-600 hover:underline"
+                    className="shrink-0 text-xs text-red-600 hover:underline"
                   >
                     Șterge
                   </button>
