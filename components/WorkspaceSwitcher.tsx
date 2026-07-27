@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import type { WorkspaceOption } from '@/lib/workspace'
 
 export default function WorkspaceSwitcher({
@@ -12,6 +12,7 @@ export default function WorkspaceSwitcher({
   activeId: string | null
 }) {
   const router = useRouter()
+  const pathname = usePathname()
   const [pending, setPending] = useState(false)
 
   async function switchTo(workspaceId: string) {
@@ -23,7 +24,18 @@ export default function WorkspaceSwitcher({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ workspaceId }),
       })
-      if (res.ok) router.refresh()
+      if (!res.ok) return
+
+      // Un client/proiect deschis aproape sigur nu există în noul workspace
+      // (RLS îl ascunde) — ieșim din pagina de detaliu spre lista corectă,
+      // nu doar refresh() pe același URL.
+      if (/^\/clienti\/.+/.test(pathname)) {
+        router.push('/clienti')
+      } else if (/^\/proiecte\/.+/.test(pathname)) {
+        router.push('/proiecte')
+      } else {
+        router.refresh()
+      }
     } finally {
       setPending(false)
     }
